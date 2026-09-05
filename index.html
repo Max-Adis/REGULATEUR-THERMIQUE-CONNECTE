@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Régulateur Thermique Connecté - Max_Adis</title>
+    
+    <!-- Meta SEO & Open Graph -->
+    <meta name="description" content="Système de régulation thermique connecté avec supervision en temps réel et commande manuelle du ventilateur via Bluetooth (Arduino, DHT11, HC-05).">
+    <meta name="author" content="Groupe 5 - Smart Innovators | Max_Adis">
+    <meta property="og:title" content="Régulateur Thermique Connecté | Max_Adis">
+    <meta property="og:description" content="Supervision en temps réel de la température et pilotage du ventilateur par smartphone.">
+    <meta property="og:type" content="website">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #D90429;
+            --primary-light: #ffebee;
+            --primary-hover: #b80322;
+            --accent-blue: #0284c7;
+            --accent-blue-light: #e0f2fe;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --border: #e2e8f0;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --card-hover-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes floatImage {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .reveal {
+            opacity: 0;
+        }
+
+        .reveal.active {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Typographie */
+        h1, h2, h3, h4 {
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1.25;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1.25rem;
+            letter-spacing: -0.025em;
+        }
+
+        h2 {
+            font-size: 2.15rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.75rem;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 54px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), #ef4444);
+            border-radius: 2px;
+        }
+
+        h2.text-center::after {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 0;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-weight: 800;
+            font-size: 1.45rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .nav-logo span {
+            color: var(--primary);
+        }
+
+        .nav-logo-badge {
+            background: var(--primary-light);
+            color: var(--primary);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            border: 1px solid rgba(217, 4, 41, 0.2);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-github {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--text-dark);
+            color: #ffffff !important;
+            padding: 0.55rem 1.15rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .nav-github:hover {
+            background: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-dark);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        /* Hero */
+        header {
+            background-color: var(--bg-white);
+            padding: 5.5rem 0;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            left: -10%;
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(217, 4, 41, 0.08) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            right: -10%;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(2, 132, 199, 0.08) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .hero-wrap {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-text {
+            flex: 1.15;
+        }
+
+        .hero-image {
+            flex: 0.85;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
+            border-radius: 16px;
+            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.15), 0 8px 12px -6px rgba(0, 0, 0, 0.1);
+            animation: floatImage 4.5s ease-in-out infinite;
+            border: 1px solid var(--border);
+        }
+
+        .hero-image::after {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            right: 10%;
+            bottom: 10%;
+            background: var(--primary);
+            filter: blur(50px);
+            opacity: 0.18;
+            z-index: -1;
+            transition: opacity 0.5s ease;
+        }
+
+        .hero-image:hover::after {
+            opacity: 0.3;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 0.35rem 0.9rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            border: 1px solid rgba(217, 4, 41, 0.2);
+        }
+
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1.75rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .hero-meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hero-meta-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .hero-meta-val {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        /* Sections */
+        section {
+            padding: 5rem 0;
+        }
+
+        .bg-white {
+            background-color: var(--bg-white);
+        }
+
+        /* Grilles */
+        .grid-2 {
+            display: grid;
+            gap: 4rem;
+            grid-template-columns: repeat(2, 1fr);
+            align-items: center;
+        }
+
+        .grid-4 {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .grid-3 {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        /* Cartes interactives avec Tilt */
+        .card {
+            background: var(--bg-white);
+            padding: 2.25rem 2rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: var(--card-shadow);
+            transition: box-shadow 0.3s ease, transform 0.1s ease-out;
+            transform-style: preserve-3d;
+            height: 100%;
+        }
+
+        .card:hover {
+            box-shadow: var(--card-hover-shadow);
+            border-color: rgba(217, 4, 41, 0.3);
+        }
+
+        .icon-box {
+            width: 52px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 12px;
+            margin-bottom: 1.25rem;
+        }
+
+        .icon-box.blue {
+            background: var(--accent-blue-light);
+            color: var(--accent-blue);
+        }
+
+        .bullet-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 1.75rem;
+            margin-bottom: 0.85rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .bullet-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        /* Section Intérieur & Fonctionnement */
+        .inside-img-box {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 16px 28px -8px rgba(0, 0, 0, 0.12);
+            border: 1px solid var(--border);
+        }
+
+        .inside-img-box img {
+            width: 100%;
+            height: 420px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s ease;
+        }
+
+        .inside-img-box:hover img {
+            transform: scale(1.04);
+        }
+
+        .mode-badge {
+            display: inline-block;
+            padding: 0.25rem 0.65rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .mode-badge.auto {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .mode-badge.manual {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* Section Étapes */
+        .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Section Participants (En bas) */
+        .team-section {
+            background: #ffffff;
+            border-top: 1px solid var(--border);
+            padding: 5rem 0 4rem 0;
+        }
+
+        .team-card {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.08);
+            border-color: rgba(217, 4, 41, 0.3);
+        }
+
+        .team-avatar {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 1.25rem auto;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), #ef4444);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.5rem;
+            box-shadow: 0 8px 16px -4px rgba(217, 4, 41, 0.3);
+        }
+
+        .team-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .team-role {
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #0b0f17;
+            color: #ffffff;
+            padding: 4rem 0 2.5rem 0;
+            text-align: center;
+            border-top: 4px solid var(--primary);
+        }
+
+        footer p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .github-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: #ffffff;
+            color: #0b0f17;
+            padding: 0.85rem 1.75rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-top: 1.25rem;
+            transition: all 0.25s ease;
+        }
+
+        .github-btn:hover {
+            background: var(--primary);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(217, 4, 41, 0.4);
+        }
+
+        /* Responsive Media Queries */
+        @media (max-width: 1024px) {
+            .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .grid-3 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-wrap: wrap;
+                padding: 0 1.5rem;
+            }
+            .hamburger {
+                display: block;
+            }
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                padding: 1rem 0;
+                gap: 1.2rem;
+                margin-top: 1rem;
+                border-top: 1px solid var(--border);
+            }
+            .nav-links.show {
+                display: flex;
+            }
+            .nav-github {
+                width: 100%;
+                justify-content: center;
+            }
+
+            header {
+                padding: 3.5rem 0;
+            }
+            .hero-wrap {
+                flex-direction: column;
+                text-align: center;
+                gap: 2.5rem;
+            }
+            h1 {
+                font-size: 2.25rem;
+            }
+            h2 {
+                font-size: 1.75rem;
+            }
+            h2::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .hero-meta {
+                justify-content: center;
+            }
+            .hero-image img {
+                height: 280px;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+            .grid-4 {
+                grid-template-columns: 1fr;
+            }
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            .inside-img-box img {
+                height: 280px;
+            }
+            section {
+                padding: 3.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barre de Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <span>Max_</span>Adis
+                <span class="nav-logo-badge">Projet IoT</span>
+            </a>
+
+            <button class="hamburger" aria-label="Menu de navigation">
+                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+
+            <div class="nav-links">
+                <a href="#presentation">Présentation</a>
+                <a href="#materiel">Matériel</a>
+                <a href="#fonctionnement">Fonctionnement</a>
+                <a href="#etapes">Étapes</a>
+                <a href="#equipe">Équipe</a>
+                <a href="https://github.com/Max-Adis/REGULATEUR-THERMIQUE-CONNECTE" target="_blank" class="nav-github">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57C20.565 21.795 24 17.31 24 12c0-6.63-5.37-12-12-12z"/>
+                    </svg>
+                    GitHub
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Hero (Image 1 : Vue Extérieure) -->
+    <header>
+        <div class="container hero-wrap">
+            <div class="hero-text reveal">
+                <span class="tag">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    IoT & Domotique Intelligente
+                </span>
+                <h1>Régulateur Thermique Connecté</h1>
+                <p style="font-size: 1.15rem; color: var(--text-dark); font-weight: 500;">
+                    Supervision continue de la température et contrôle sans fil d'un système de ventilation via liaison Bluetooth.
+                </p>
+                <p>
+                    Conçu sur une architecture <strong>Arduino Uno</strong> avec capteur <strong>DHT11</strong>, module relais de puissance et une application mobile dédiée développée sous <strong>MIT App Inventor</strong>.
+                </p>
+
+                <div class="hero-meta">
+                    <div class="hero-meta-item">
+                        <span class="hero-meta-label">Microcontrôleur</span>
+                        <span class="hero-meta-val">Arduino Uno</span>
+                    </div>
+                    <div class="hero-meta-item">
+                        <span class="hero-meta-label">Protocole</span>
+                        <span class="hero-meta-val">Bluetooth HC-05</span>
+                    </div>
+                    <div class="hero-meta-item">
+                        <span class="hero-meta-label">Régulation</span>
+                        <span class="hero-meta-val">Auto & Manuel</span>
+                    </div>
+                    <div class="hero-meta-item">
+                        <span class="hero-meta-label">Formation</span>
+                        <span class="hero-meta-val">Max_Adis 2026</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-image reveal delay-1">
+                <!-- Image 1 : Vue Extérieure du projet -->
+                <img src="assets/vu_exterieur.jpeg" alt="Vue extérieure de la maquette du Régulateur Thermique Connecté">
+            </div>
+        </div>
+    </header>
+
+    <!-- Présentation & Problématique -->
+    <section id="presentation">
+        <div class="container grid-2">
+            <div class="reveal">
+                <h2>Présentation & Problématique</h2>
+                <p>
+                    Dans de nombreux environnements tels que les habitations, les salles informatiques ou les serres agricoles, les élévations anormales de température causent une surchauffe des équipements électroniques, un inconfort pour les occupants et d'importantes pertes matérielles.
+                </p>
+                <p>
+                    Les méthodes de régulation classiques exigent généralement une surveillance humaine permanente. Le <strong>Régulateur Thermique Connecté</strong> apporte une réponse simple, accessible et automatisée : surveiller en temps réel la température sur smartphone et actionner ou couper la ventilation automatiquement ou à distance sans intervention physique directe.
+                </p>
+            </div>
+
+            <div class="card reveal delay-1">
+                <h3>Objectifs du Projet</h3>
+                <ul class="bullet-list">
+                    <li>Mesurer avec précision la température ambiante par sonde thermo-hygrométrique.</li>
+                    <li>Transmettre les relevés instantanément via une liaison série sans fil Bluetooth.</li>
+                    <li>Afficher en temps réel la température sur l'application mobile Android dédiée.</li>
+                    <li>Permettre un double mode d'opération : basculement fluide entre régulation automatique par seuil et pilotage manuel forcé.</li>
+                    <li>Sécuriser le circuit de puissance grâce à un relais d'isolation galvanique.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Matériel & Architecture (Grille 4 cartes avec Tilt 3D) -->
+    <section id="materiel" class="bg-white">
+        <div class="container">
+            <h2 class="text-center" style="text-align: center;">Architecture & Matériel</h2>
+            <p style="text-align: center; max-width: 720px; margin: 0 auto 3.5rem auto;">
+                Chaque élément a été sélectionné pour assurer une régulation fiable, une communication réactive et une excellente robustesse opérationnelle.
+            </p>
+
+            <div class="grid-4">
+                <!-- Carte 1 : Arduino Uno -->
+                <div class="card reveal">
+                    <div class="icon-box">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
+                    </div>
+                    <h3>Arduino Uno</h3>
+                    <p>Le microcontrôleur central ATmega328P. Il lit le capteur à intervalles réguliers (temporisation non bloquante `millis()`), analyse les consignes et commande le relais.</p>
+                </div>
+
+                <!-- Carte 2 : Capteur DHT11 -->
+                <div class="card reveal delay-1">
+                    <div class="icon-box blue">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
+                    </div>
+                    <h3>Capteur DHT11</h3>
+                    <p>Sonde numérique mesurant la température avec signal calibré sur 1 fil de données. Précision optimale pour la détection des hausses thermiques ambiantes.</p>
+                </div>
+
+                <!-- Carte 3 : Module Bluetooth HC-05 -->
+                <div class="card reveal delay-2">
+                    <div class="icon-box">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 7 10 10-5 5V2l5 5L7 17"/></svg>
+                    </div>
+                    <h3>Module Bluetooth HC-05</h3>
+                    <p>Gère la liaison série sans fil bidirectionnelle (UART 9600 bauds via SoftwareSerial broches 10/11) reliant l'Arduino à l'application smartphone.</p>
+                </div>
+
+                <!-- Carte 4 : Relais & Ventilateur -->
+                <div class="card reveal delay-3">
+                    <div class="icon-box blue">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                    </div>
+                    <h3>Module Relais 1 Canal</h3>
+                    <p>Isole le circuit logique basse tension (5V) de la charge de puissance afin d'alimenter et piloter le ventilateur électrique en toute sécurité.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Intérieur de la Maquette & Fonctionnement (Image 2 : Vue Intérieure) -->
+    <section id="fonctionnement">
+        <div class="container grid-2">
+            <div class="reveal">
+                <!-- Image 2 : Vue Intérieure du projet -->
+                <div class="inside-img-box">
+                    <img src="assets/interieur.jpeg" alt="Vue intérieure de la maquette montrant l'agencement des circuits et du ventilateur">
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.75rem; text-align: center;">
+                    Vue intérieure : intégration de l'actionneur de ventilation et de la distribution thermique dans la maquette.
+                </p>
+            </div>
+
+            <div class="reveal delay-1">
+                <h2>Fonctionnement & Double Mode</h2>
+                <p>
+                    Le microprogramme exécuté sur l'Arduino assure une double stratégie de fonctionnement pensée pour concilier autonomie et flexibilité utilisateur :
+                </p>
+
+                <div style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
+                    <div class="card" style="padding: 1.5rem;">
+                        <span class="mode-badge auto">Mode Automatique</span>
+                        <h4 style="margin-bottom: 0.4rem; color: var(--text-dark);">Régulation intelligente sur seuil</h4>
+                        <p style="margin-bottom: 0; font-size: 0.92rem;">
+                            Le système surveille la température en continu. Si la température dépasse le seuil défini (seuil par défaut à 31.0°C ou personnalisé via trame <code>S&lt;val&gt;</code>), le ventilateur démarre automatiquement. Il s'éteint dès que la température repasse sous la limite.
+                        </p>
+                    </div>
+
+                    <div class="card" style="padding: 1.5rem;">
+                        <span class="mode-badge manual">Mode Manuel</span>
+                        <h4 style="margin-bottom: 0.4rem; color: var(--text-dark);">Commande directe par smartphone</h4>
+                        <p style="margin-bottom: 0; font-size: 0.92rem;">
+                            En mode manuel, l'utilisateur a le contrôle total depuis l'interface <em>ThermoControl BT</em>. La commande <code>A</code> active le ventilateur, et la commande <code>B</code> l'arrête immédiatement, indépendamment du niveau de température actuel.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Étapes de Réalisation -->
+    <section id="etapes" class="bg-white">
+        <div class="container">
+            <h2 class="text-center" style="text-align: center;">Étapes de Réalisation</h2>
+            <p style="text-align: center; max-width: 680px; margin: 0 auto 3.5rem auto;">
+                Un cycle de développement méthodique, de la conception théorique à la maquette physique fonctionnelle.
+            </p>
+
+            <div class="grid-4">
+                <div class="card reveal">
+                    <span class="step-num">1</span>
+                    <h3>Étude & Dimensionnement</h3>
+                    <p>Analyse des contraintes thermiques, calcul des plages de température et sélection des composants électroniques adaptés.</p>
+                </div>
+
+                <div class="card reveal delay-1">
+                    <span class="step-num">2</span>
+                    <h3>Câblage Breadboard</h3>
+                    <p>Réalisation du prototype sans soudure, vérification des liaisons UART Bluetooth et du pilotage du relais.</p>
+                </div>
+
+                <div class="card reveal delay-2">
+                    <span class="step-num">3</span>
+                    <h3>Développement Logiciel</h3>
+                    <p>Codage Arduino en C++ sans délai bloquant (`millis`) et création de l'application mobile tactile sur MIT App Inventor.</p>
+                </div>
+
+                <div class="card reveal delay-3">
+                    <span class="step-num">4</span>
+                    <h3>Maquette & Tests</h3>
+                    <p>Fabrication de la structure physique, intégration des capteurs et validation des cas de tests opérationnels.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ÉQUIPE & PARTICIPANTS (En bas, comme expressément demandé) -->
+    <section id="equipe" class="team-section">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 3.5rem;">
+                <span class="tag">Édition 2026 — Vague 1</span>
+                <h2 class="text-center" style="text-align: center;">Participants du Projet</h2>
+                <p style="max-width: 650px; margin: 0 auto;">
+                    Projet conçu et réalisé par le <strong>Groupe n°5 (Smart Innovators)</strong> dans le cadre du cursus pratique au <strong>Centre de formation Max_Adis</strong>.
+                </p>
+            </div>
+
+            <div class="grid-3">
+                <!-- Participant 1 -->
+                <div class="team-card reveal">
+                    <div class="team-avatar">FA</div>
+                    <div class="team-name">FADONOUGBO Anselme</div>
+                    <div class="team-role">Concepteur & Réalisateur</div>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Groupe n°5 — Smart Innovators</p>
+                </div>
+
+                <!-- Participant 2 -->
+                <div class="team-card reveal delay-1">
+                    <div class="team-avatar">HT</div>
+                    <div class="team-name">HOUNKOKOE Trifène</div>
+                    <div class="team-role">Concepteur & Réalisateur</div>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Groupe n°5 — Smart Innovators</p>
+                </div>
+
+                <!-- Participant 3 -->
+                <div class="team-card reveal delay-2">
+                    <div class="team-avatar">KA</div>
+                    <div class="team-name">KINDOMISSI Achille</div>
+                    <div class="team-role">Concepteur & Réalisateur</div>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Groupe n°5 — Smart Innovators</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 3.5rem; padding: 2rem; background: var(--bg-light); border-radius: 16px; border: 1px dashed var(--border);">
+                <h4 style="font-size: 1.15rem; color: var(--text-dark); margin-bottom: 0.5rem;">Centre de Formation Max_Adis</h4>
+                <p style="max-width: 600px; margin: 0 auto; font-size: 0.95rem;">
+                    <em>« Crée et contrôle tes propres systèmes intelligents »</em> — Accompagnement de l'idée au prototype fonctionnel en Robotique, IoT et Domotique.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p style="font-weight: 600; font-size: 1.05rem; color: #ffffff;">Régulateur Thermique Connecté</p>
+            <p style="font-size: 0.9rem;">
+                Groupe n°5 (Smart Innovators) · Centre de Formation Max_Adis · Porto-Novo, Bénin
+            </p>
+            <a href="https://github.com/Max-Adis/REGULATEUR-THERMIQUE-CONNECTE" target="_blank" class="github-btn">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57C20.565 21.795 24 17.31 24 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+                Voir le Code sur GitHub
+            </a>
+        </div>
+    </footer>
+
+    <!-- Scripts interactifs (Animations, Tilt 3D et Hamburger Menu) -->
+    <script>
+        // Menu Hamburger Mobile
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('show');
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('show');
+            });
+        });
+
+        // Intersection Observer pour animations fluides au scroll
+        document.addEventListener('DOMContentLoaded', () => {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            setTimeout(() => {
+                document.querySelectorAll('header .reveal').forEach(el => {
+                    el.classList.add('active');
+                });
+            }, 100);
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.12 });
+
+            reveals.forEach(reveal => observer.observe(reveal));
+
+            // Effet 3D Tilt (Dandinement interactif) sur les cartes
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', e => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const xPct = (x / rect.width) - 0.5;
+                    const yPct = (y / rect.height) - 0.5;
+                    card.style.transform = `perspective(1000px) rotateX(${yPct * -12}deg) rotateY(${xPct * 12}deg) scale(1.02)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transition = 'box-shadow 0.3s ease, transform 0.5s ease';
+                    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+                    setTimeout(() => {
+                        card.style.transition = 'box-shadow 0.3s ease, transform 0.1s ease-out';
+                    }, 500);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
