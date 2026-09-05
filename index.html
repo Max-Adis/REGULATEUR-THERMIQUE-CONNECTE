@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ThermoControl BT — Régulateur Thermique Connecté</title>
+    <title>ThermoControl BT — Système de Régulation Thermique Connecté</title>
     
-    <!-- SEO & Métadonnées -->
-    <meta name="description" content="ThermoControl BT : Régulateur thermique connecté et système de ventilation intelligente via Bluetooth HC-05 et Arduino.">
+    <!-- Métadonnées & SEO -->
+    <meta name="description" content="ThermoControl BT : Système intelligent de protection contre la surchauffe et de régulation thermique automatisée pour habitations, salles serveurs et serres.">
     <meta name="author" content="Groupe 5 (Smart Innovators) - Max_Adis">
     <link rel="icon" type="image/jpeg" href="assets/logo.jpg">
 
@@ -17,7 +17,7 @@
 
     <style>
         :root {
-            /* Palette Dérivée du Logo (Bleu Azur, Ciel Frais & Orange Thermique) */
+            /* Palette Directe du Logo */
             --primary-blue: #0072CE;
             --primary-blue-dark: #00569e;
             --sky-blue: #38bdf8;
@@ -33,7 +33,7 @@
             --bg-soft: #f1f5f9;
             
             --text-title: #0f172a;
-            --text-body: #475569;
+            --text-body: #334155;
             --text-muted: #64748b;
             
             --border-color: #e2e8f0;
@@ -75,12 +75,12 @@
             padding: 0 2rem;
         }
 
-        /* Barre de Navigation Épurée & Lumineuse */
+        /* Navbar Épurée & Lumineuse */
         .navbar {
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.94);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border-color);
@@ -167,7 +167,7 @@
             background: linear-gradient(135deg, var(--primary-blue-dark), var(--primary-blue));
         }
 
-        /* Hero Section (Design Lumineux & Aéré) */
+        /* Hero Section (Orientée Bénéfices & Utilité Réelle) */
         header {
             padding: 5rem 0 4rem 0;
             position: relative;
@@ -223,10 +223,11 @@
         }
 
         .hero-lead {
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             color: var(--text-body);
             margin-bottom: 2rem;
             line-height: 1.7;
+            font-weight: 450;
         }
 
         .hero-pills-row {
@@ -251,12 +252,12 @@
         }
 
         .hero-pill-value {
-            font-size: 1.05rem;
+            font-size: 1.02rem;
             font-weight: 700;
             color: var(--text-title);
         }
 
-        /* Image Hero avec style Vitrine & Badge Live */
+        /* Image Hero avec Vitrine & Badge */
         .hero-showcase {
             position: relative;
         }
@@ -306,10 +307,58 @@
             color: var(--primary-blue);
         }
 
+        /* Section Valeur Ajoutée & Problématique */
+        .value-section {
+            padding: 4.5rem 0;
+            background: #ffffff;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2.5rem;
+        }
+
+        .value-card {
+            background: var(--bg-page);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.25rem 1.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .value-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--primary-blue);
+            box-shadow: var(--shadow-card-hover);
+        }
+
+        .value-icon-box {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: var(--sky-blue-light);
+            border: 1px solid var(--sky-blue-border);
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .value-icon-box.orange {
+            background: var(--thermal-orange-light);
+            border-color: var(--thermal-orange-border);
+            color: var(--thermal-orange);
+        }
+
         /* En-têtes de Sections */
         .section-header {
             text-align: center;
-            max-width: 720px;
+            max-width: 760px;
             margin: 0 auto 3.5rem auto;
         }
 
@@ -328,9 +377,9 @@
             letter-spacing: -0.02em;
         }
 
-        /* SIMULATEUR LIVE INTERACTIF (Thème Lumineux) */
+        /* SIMULATEUR LIVE INTERACTIF */
         .simulator-section {
-            padding: 4.5rem 0;
+            padding: 5rem 0;
         }
 
         .simulator-panel {
@@ -541,7 +590,7 @@
             border: 1px solid var(--border-color);
         }
 
-        /* Cartes d'Architecture Matérielle (Style Lumineux & Tilt 3D) */
+        /* Cartes d'Architecture Matérielle */
         .hardware-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -598,6 +647,8 @@
         /* Section Intérieur Maquette (Image 2) */
         .inside-section {
             padding: 5rem 0;
+            background: #ffffff;
+            border-top: 1px solid var(--border-color);
         }
 
         .inside-grid {
@@ -627,7 +678,7 @@
             display: flex;
             align-items: flex-start;
             gap: 1.25rem;
-            background: var(--bg-white);
+            background: var(--bg-page);
             border: 1px solid var(--border-color);
             border-radius: 16px;
             padding: 1.25rem 1.5rem;
@@ -658,7 +709,7 @@
         /* ÉQUIPE & PARTICIPANTS (En bas de page) */
         .team-section {
             padding: 5.5rem 0 4.5rem 0;
-            background: #ffffff;
+            background: var(--bg-page);
             border-top: 1px solid var(--border-color);
         }
 
@@ -670,7 +721,7 @@
         }
 
         .team-card {
-            background: var(--bg-page);
+            background: var(--bg-white);
             border: 1px solid var(--border-color);
             border-radius: 18px;
             padding: 2.5rem 1.5rem;
@@ -746,7 +797,7 @@
 
         /* Responsive */
         @media (max-width: 1024px) {
-            .hardware-grid { grid-template-columns: repeat(2, 1fr); }
+            .value-grid, .hardware-grid { grid-template-columns: repeat(2, 1fr); }
             .hero-grid, .inside-grid, .simulator-panel { grid-template-columns: 1fr; gap: 2.5rem; }
             .team-grid { grid-template-columns: 1fr; }
         }
@@ -754,8 +805,7 @@
         @media (max-width: 768px) {
             h1 { font-size: 2.35rem; }
             .nav-links { display: none; }
-            .hero-pills-row { grid-template-columns: 1fr; gap: 1rem; }
-            .hardware-grid { grid-template-columns: 1fr; }
+            .hero-pills-row, .value-grid, .hardware-grid { grid-template-columns: 1fr; gap: 1rem; }
             .hero-img-card img, .inside-img-card img { height: 280px; }
             .simulator-panel { padding: 1.5rem; }
         }
@@ -769,13 +819,14 @@
             <a href="#" class="brand-logo">
                 <img src="assets/logo.jpg" alt="Logo ThermoControl BT">
                 <span>THERMOCONTROL <span style="color: var(--primary-blue);">BT</span></span>
-                <span class="logo-tag">SMART SYSTEM</span>
+                <span class="logo-tag">SYSTÈME CONNECTÉ</span>
             </a>
 
             <div class="nav-links">
+                <a href="#utilite">Utilité & Impact</a>
                 <a href="#simulateur">Simulateur Live</a>
                 <a href="#architecture">Architecture</a>
-                <a href="#interieur">Intérieur & Maquette</a>
+                <a href="#interieur">Maquette & Flux</a>
                 <a href="#equipe">Équipe & Concepteurs</a>
                 <a href="https://github.com/Max-Adis/REGULATEUR-THERMIQUE-CONNECTE" target="_blank" class="btn-github">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -787,31 +838,31 @@
         </div>
     </nav>
 
-    <!-- Header Hero (Image 1 : Vue Extérieure) -->
+    <!-- Header Hero (Mise en Valeur du Projet & Utilité Concrète) -->
     <header>
         <div class="container hero-grid">
             <div>
                 <div class="badge-system">
                     <span class="pulse-dot"></span>
-                    <span>Régulation Thermique & Domotique Connectée</span>
+                    <span>Protection Contre la Surchauffe & Domotique</span>
                 </div>
-                <h1>Régulateur Thermique <span class="gradient-text">Connecté</span></h1>
+                <h1>Protégez vos espaces avec une <span class="gradient-text">ventilation autonome</span></h1>
                 <p class="hero-lead">
-                    Système intelligent de surveillance continue de la température et de commande automatisée de ventilation via <strong>Arduino Uno</strong> et communication sans fil <strong>Bluetooth HC-05</strong>.
+                    <strong>ThermoControl BT</strong> surveille en continu la température de vos locaux, déclenche automatiquement l'extraction d'air dès qu'une surchauffe est détectée et vous permet de reprendre le contrôle à distance depuis votre smartphone.
                 </p>
 
                 <div class="hero-pills-row">
                     <div class="hero-pill">
-                        <span class="hero-pill-label">Sonde Ambiante</span>
-                        <span class="hero-pill-value">DHT11 Numérique</span>
+                        <span class="hero-pill-label">Protection Active</span>
+                        <span class="hero-pill-value">Refroidissement Automatique</span>
                     </div>
                     <div class="hero-pill">
-                        <span class="hero-pill-label">Liaison Sans Fil</span>
-                        <span class="hero-pill-value">Bluetooth SPP UART</span>
+                        <span class="hero-pill-label">Supervision Sans Fil</span>
+                        <span class="hero-pill-value">Temps Réel sur Smartphone</span>
                     </div>
                     <div class="hero-pill">
-                        <span class="hero-pill-label">Actionneur</span>
-                        <span class="hero-pill-value">Relais 1 Canal 5V</span>
+                        <span class="hero-pill-label">Gestion Hybride</span>
+                        <span class="hero-pill-value">Mode Seuil & Forçage Manuel</span>
                     </div>
                 </div>
             </div>
@@ -819,15 +870,15 @@
             <!-- Image 1 : Vue Extérieure -->
             <div class="hero-showcase">
                 <div class="hero-img-card">
-                    <img src="assets/vu_exterieur.jpeg" alt="Vue extérieure de la maquette ThermoControl BT">
+                    <img src="assets/vu_exterieur.jpeg" alt="Vue extérieure de la maquette du projet ThermoControl BT">
                     <div class="hero-live-badge">
                         <div>
-                            <span style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Télémétrie Live</span>
+                            <span style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Surveillance en Direct</span>
                             <div class="temp-display-hero" id="heroTempDisplay">31.5 °C</div>
                         </div>
                         <div style="margin-left: 0.5rem; padding-left: 0.85rem; border-left: 2px solid var(--border-color);">
-                            <span style="font-size: 0.72rem; color: var(--primary-blue); font-weight: 700; text-transform: uppercase;">Ventilation</span>
-                            <div style="font-size: 0.88rem; font-weight: 800; color: var(--text-title);" id="heroFanStatus">Active (ON)</div>
+                            <span style="font-size: 0.72rem; color: var(--primary-blue); font-weight: 700; text-transform: uppercase;">Ventilateur</span>
+                            <div style="font-size: 0.88rem; font-weight: 800; color: var(--text-title);" id="heroFanStatus">Actif (ON)</div>
                         </div>
                     </div>
                 </div>
@@ -835,14 +886,56 @@
         </div>
     </header>
 
+    <!-- SECTION UTILITÉ & MISE EN VALEUR CONCRÈTE -->
+    <section id="utilite" class="value-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">À quoi sert ce projet</span>
+                <h2 class="section-title">Une réponse concrète aux défis thermiques</h2>
+                <p style="margin-top: 0.5rem;">
+                    La hausse excessive des températures dégrade les équipements électroniques sensibles, engendre un inconfort humain et peut provoquer d'importantes pertes matérielles. ThermoControl BT apporte une solution automatisée, fiable et sans contrainte.
+                </p>
+            </div>
+
+            <div class="value-grid">
+                <!-- Bénéfice 1 -->
+                <div class="value-card">
+                    <div class="value-icon-box">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <h3>Protection 24h/24 des Équipements</h3>
+                    <p>Idéal pour les baies de serveurs, armoires électriques et laboratoires. Le système évacue la chaleur accumulée avant qu'elle n'endommage vos composants vitaux.</p>
+                </div>
+
+                <!-- Bénéfice 2 -->
+                <div class="value-card">
+                    <div class="value-icon-box orange">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                    </div>
+                    <h3>Contrôle Sans Fil sans Déplacement</h3>
+                    <p>Visualisez la température en direct sur votre smartphone et actionnez ou coupez le ventilateur à distance en un seul geste grâce à l'application mobile dédiée.</p>
+                </div>
+
+                <!-- Bénéfice 3 -->
+                <div class="value-card">
+                    <div class="value-icon-box">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+                    </div>
+                    <h3>Économie d'Énergie Intelligente</h3>
+                    <p>Finie la ventilation continue et énergivore. L'actionneur s'enclenche uniquement lorsque le seuil d'alerte est dépassé et s'éteint dès le retour à la normale.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- SIMULATEUR INTERACTIF EN DIRECT -->
     <section id="simulateur" class="simulator-section">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Testez le système</span>
-                <h2 class="section-title">Simulateur Live en Temps Réel</h2>
+                <span class="section-tag">Démonstration Fonctionnelle</span>
+                <h2 class="section-title">Simulateur en Temps Réel</h2>
                 <p style="margin-top: 0.5rem;">
-                    Faites varier la température ambiante ou le seuil pour observer le déclenchement immédiat de la ventilation selon le code Arduino.
+                    Faites varier la température ambiante ou la consigne de seuil pour observer le déclenchement autonome de la ventilation.
                 </p>
             </div>
 
@@ -854,7 +947,7 @@
                         <div class="sim-row-head">
                             <span class="sim-title-label">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary-blue)" stroke-width="2.5"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
-                                Température Mesurée (Sonde DHT11)
+                                Température Mesurée dans la Pièce
                             </span>
                             <span class="sim-num-badge" id="tempVal">32.0 °C</span>
                         </div>
@@ -866,7 +959,7 @@
                         <div class="sim-row-head">
                             <span class="sim-title-label">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--thermal-orange)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-                                Seuil Critique de Déclenchement
+                                Seuil Limite de Déclenchement
                             </span>
                             <span class="sim-num-badge orange" id="thresholdVal">31.0 °C</span>
                         </div>
@@ -875,19 +968,19 @@
 
                     <!-- Sélecteur de Mode -->
                     <div>
-                        <span class="sim-title-label" style="margin-bottom: 0.6rem;">Mode de Régulation</span>
+                        <span class="sim-title-label" style="margin-bottom: 0.6rem;">Mode Opérationnel</span>
                         <div class="mode-switch-box">
-                            <button class="btn-mode active" id="btnModeAuto" onclick="setMode('auto')">🤖 Mode Automatique (M1)</button>
-                            <button class="btn-mode" id="btnModeManual" onclick="setMode('manual')">🕹️ Mode Manuel (M0)</button>
+                            <button class="btn-mode active" id="btnModeAuto" onclick="setMode('auto')">Mode Automatique (Seuil)</button>
+                            <button class="btn-mode" id="btnModeManual" onclick="setMode('manual')">Mode Manuel (Application)</button>
                         </div>
                     </div>
 
                     <!-- Actions manuelles -->
                     <div id="manualPanel" style="display: none;">
-                        <span class="sim-title-label" style="margin-bottom: 0.6rem;">Commandes Tactiles (Application Mobile)</span>
+                        <span class="sim-title-label" style="margin-bottom: 0.6rem;">Commandes Tactiles Forcées</span>
                         <div class="manual-btn-group">
-                            <button class="btn-force on" onclick="forceFan(true)">⚡ Forcer Marche (A)</button>
-                            <button class="btn-force off" onclick="forceFan(false)">⛔ Forcer Arrêt (B)</button>
+                            <button class="btn-force on" onclick="forceFan(true)">Forcer la Marche (Commande A)</button>
+                            <button class="btn-force off" onclick="forceFan(false)">Forcer l'Arrêt (Commande B)</button>
                         </div>
                     </div>
                 </div>
@@ -897,16 +990,11 @@
                     <div class="turbine-housing" id="turbineHousing">
                         <!-- Turbine SVG avec pales Bleues et Orange comme le logo -->
                         <svg class="turbine-svg" viewBox="0 0 100 100">
-                            <!-- Moyeu central -->
                             <circle cx="50" cy="50" r="14" fill="#ffffff" stroke="var(--primary-blue)" stroke-width="4"/>
                             <circle cx="50" cy="50" r="7" fill="var(--thermal-orange)"/>
-                            <!-- Pale 1 (Bleu) -->
                             <path d="M50 36 C50 15, 68 12, 75 22 C78 28, 70 38, 56 42 Z" fill="url(#blueBladeGrad)"/>
-                            <!-- Pale 2 (Orange) -->
                             <path d="M64 50 C85 50, 88 68, 78 75 C72 78, 62 70, 58 56 Z" fill="url(#orangeBladeGrad)"/>
-                            <!-- Pale 3 (Bleu) -->
                             <path d="M50 64 C50 85, 32 88, 25 78 C22 72, 30 62, 44 58 Z" fill="url(#blueBladeGrad)"/>
-                            <!-- Pale 4 (Orange) -->
                             <path d="M36 50 C15 50, 12 32, 22 25 C28 22, 38 30, 42 44 Z" fill="url(#orangeBladeGrad)"/>
                             
                             <defs>
@@ -923,7 +1011,7 @@
                     </div>
 
                     <div id="fanStateBadge" class="fan-status-badge active-state">
-                        <span>🌬️ Ventilation Active (ON)</span>
+                        <span>Ventilation Active (ON)</span>
                     </div>
 
                     <div class="telemetry-tag" id="telemetryFeed">
@@ -934,14 +1022,14 @@
         </div>
     </section>
 
-    <!-- ARCHITECTURE & MATÉRIEL -->
+    <!-- ARCHITECTURE TECHNIQUE -->
     <section id="architecture" style="padding: 4.5rem 0;">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Composants & Topologie</span>
-                <h2 class="section-title">Architecture Matérielle</h2>
+                <span class="section-tag">Ingénierie & Matériel</span>
+                <h2 class="section-title">Fondations Techniques du Système</h2>
                 <p style="margin-top: 0.5rem;">
-                    Sélection optimale de composants pour assurer une régulation thermique rapide, isolée et fiable.
+                    Une chaîne électronique pensée pour la robustesse, la sécurité électrique et la réactivité instantanée.
                 </p>
             </div>
 
@@ -951,8 +1039,8 @@
                     <div class="tech-icon-wrap">
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
                     </div>
-                    <h3>Arduino Uno R3</h3>
-                    <p>Microcontrôleur central ATmega328P. Exécute l'analyse en boucle non bloquante via <code>millis()</code> pour maintenir la réception des ordres série instantanée.</p>
+                    <h3>Microcontrôleur Central</h3>
+                    <p>Traite les données de température en continu et gère l'exécution des ordres sans blocage temporel pour une réactivité optimale.</p>
                 </div>
 
                 <!-- 2. Sonde DHT11 -->
@@ -960,8 +1048,8 @@
                     <div class="tech-icon-wrap orange">
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
                     </div>
-                    <h3>Capteur DHT11</h3>
-                    <p>Sonde thermo-hygrométrique numérique calibrée. Fournit la température ambiante en continu sur la broche numérique <code>Pin 2</code> de l'Arduino.</p>
+                    <h3>Sonde Thermique Dédiée</h3>
+                    <p>Mesure avec précision les variations thermiques de l'environnement pour déclencher la réponse adéquate en temps réel.</p>
                 </div>
 
                 <!-- 3. Bluetooth HC-05 -->
@@ -969,8 +1057,8 @@
                     <div class="tech-icon-wrap">
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7 7 10 10-5 5V2l5 5L7 17"/></svg>
                     </div>
-                    <h3>Bluetooth HC-05</h3>
-                    <p>Module de communication série sans fil SPP (UART 9600 bauds sur broches 10 et 11). Assure la liaison directe avec l'application pour la supervision.</p>
+                    <h3>Liaison Sans Fil Sécurisée</h3>
+                    <p>Permet la communication directe et autonome entre le boîtier et votre smartphone, sans dépendance à Internet.</p>
                 </div>
 
                 <!-- 4. Relais 1 Canal -->
@@ -978,8 +1066,8 @@
                     <div class="tech-icon-wrap orange">
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
                     </div>
-                    <h3>Relais Opto-isolé</h3>
-                    <p>Module de puissance 1 canal sur la broche <code>Pin 3</code>. Isole galvaniquement l'Arduino et commute l'alimentation du moteur du ventilateur en toute sécurité.</p>
+                    <h3>Commutation de Puissance</h3>
+                    <p>Isole le circuit de contrôle et pilote le moteur de ventilation pour évacuer les calories excédentaires en toute sécurité.</p>
                 </div>
             </div>
         </div>
@@ -995,32 +1083,32 @@
 
             <div>
                 <span class="section-tag">Conception Physique</span>
-                <h2 class="section-title" style="margin-bottom: 1.5rem;">Intégration Interne & Aéraulique</h2>
+                <h2 class="section-title" style="margin-bottom: 1.5rem;">Intégration et Circulation d'Air</h2>
                 <p style="margin-bottom: 2rem;">
-                    La maquette modélise une enceinte régulée thermiquement avec positionnement stratégique des flux d'air pour une efficacité maximale.
+                    La maquette matérialise une enceinte thermiquement régulée avec un agencement interne optimisé pour une extraction d'air fluide et rapide.
                 </p>
 
                 <div class="feature-item">
                     <div class="feature-num">1</div>
                     <div>
-                        <h4 style="margin-bottom: 0.2rem;">Convection Forcée</h4>
-                        <p style="font-size: 0.9rem; margin: 0;">L'hélice supérieure extrait la chaleur accumulée dès franchissement du seuil critique paramétré.</p>
+                        <h4 style="margin-bottom: 0.2rem;">Convection Forcée Efficace</h4>
+                        <p style="font-size: 0.9rem; margin: 0;">L'actionneur placé en partie haute évacue la couche d'air chaud par convection naturelle assistée.</p>
                     </div>
                 </div>
 
                 <div class="feature-item">
                     <div class="feature-num">2</div>
                     <div>
-                        <h4 style="margin-bottom: 0.2rem;">Régulation Hybride</h4>
-                        <p style="font-size: 0.9rem; margin: 0;">Supervision automatique autonome avec possibilité de reprise en main prioritaire depuis l'application smartphone.</p>
+                        <h4 style="margin-bottom: 0.2rem;">Pilotage Intelligent Double Mode</h4>
+                        <p style="font-size: 0.9rem; margin: 0;">Autonomie complète de régulation par seuil ou reprise en main directe par l'utilisateur.</p>
                     </div>
                 </div>
 
                 <div class="feature-item">
                     <div class="feature-num">3</div>
                     <div>
-                        <h4 style="margin-bottom: 0.2rem;">Isolation Galvanique</h4>
-                        <p style="font-size: 0.9rem; margin: 0;">Sécurité totale grâce à la coupure par relais séparant la commande 5V de la charge inductive motrice.</p>
+                        <h4 style="margin-bottom: 0.2rem;">Protection Électrique Totale</h4>
+                        <p style="font-size: 0.9rem; margin: 0;">Séparation physique entre la commande basse tension et le circuit d'alimentation motrice.</p>
                     </div>
                 </div>
             </div>
@@ -1081,7 +1169,7 @@
         </div>
     </footer>
 
-    <!-- Logique Interactive & Animations -->
+    <!-- Logique Interactive & Simulations -->
     <script>
         const tempSlider = document.getElementById('tempSlider');
         const thresholdSlider = document.getElementById('thresholdSlider');
@@ -1118,13 +1206,13 @@
             if (isFanOn) {
                 turbineHousing.classList.add('spinning-fan');
                 fanStateBadge.className = 'fan-status-badge active-state';
-                fanStateBadge.innerHTML = '<span>🌬️ Ventilation Active (ON)</span>';
-                if (heroFanStatus) heroFanStatus.textContent = 'Active (ON)';
+                fanStateBadge.innerHTML = '<span>Ventilation Active (ON)</span>';
+                if (heroFanStatus) heroFanStatus.textContent = 'Actif (ON)';
                 telemetryFeed.innerHTML = `TX &lt; "${currentTemp.toFixed(2)}\\n" | Relais: LOW (ON)`;
             } else {
                 turbineHousing.classList.remove('spinning-fan');
                 fanStateBadge.className = 'fan-status-badge standby-state';
-                fanStateBadge.innerHTML = '<span>🟢 Température Stable (OFF)</span>';
+                fanStateBadge.innerHTML = '<span>Température Stable (OFF)</span>';
                 if (heroFanStatus) heroFanStatus.textContent = 'Veille (OFF)';
                 telemetryFeed.innerHTML = `TX &lt; "${currentTemp.toFixed(2)}\\n" | Relais: HIGH (OFF)`;
             }
@@ -1156,12 +1244,12 @@
         updateSimulation();
 
         // Effet 3D Tilt au mouvement de la souris
-        document.querySelectorAll('.tech-card, .team-card').forEach(card => {
+        document.querySelectorAll('.value-card, .tech-card, .team-card').forEach(card => {
             card.addEventListener('mousemove', e => {
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left - rect.width / 2;
                 const y = e.clientY - rect.top - rect.height / 2;
-                card.style.transform = `perspective(1000px) rotateX(${-y * 0.06}deg) rotateY(${x * 0.06}deg) translateY(-6px)`;
+                card.style.transform = `perspective(1000px) rotateX(${-y * 0.05}deg) rotateY(${x * 0.05}deg) translateY(-6px)`;
             });
 
             card.addEventListener('mouseleave', () => {
